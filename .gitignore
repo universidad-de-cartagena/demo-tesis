@@ -1,0 +1,9 @@
+# Python virtual env
+env/
+.env/
+__pycache__/
+# Compiled translations
+*.mo
+.vscode/
+# Database
+*.sqlite3

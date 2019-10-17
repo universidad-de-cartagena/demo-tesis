@@ -10,10 +10,7 @@
 apt-get update -y
 apt-get install python3.7 python3-pip -y
 apt-get install python3.7-dev default-libmysqlclient-dev -y # [2]
-pip install \
-    mysqlclient \
-    Django \
-    django-cors-headers
+pip install -r requirements.txt
 ```
 
 ## Despliegue
