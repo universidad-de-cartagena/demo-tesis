@@ -1,13 +1,27 @@
 from os.path import abspath, dirname, join
 
+from environ import Env
+
 # Build paths inside the project like this: join(BASE_DIR, ...)
 BASE_DIR = dirname(dirname(abspath(__file__)))
 
+# Environment object with **default** types and values for specific variables
+#   It is also possible to setup a default value when calling the Env object
+#       env('ENV_VAR', default='value', parse_default=True, cast=int)
+env = Env(
+    DEBUG=(bool, False),
+    SECRET_KEY=(str, 'CHANGE_ME_PLEASE'),
+    DATABASE_URL=(str, 'sqlite:///' + join(BASE_DIR, 'database/db.sqlite3'))
+)
+
+if env('DEBUG'):
+    Env.read_env()  # Reads .env file
+
 # SECURITY WARNING: keep the secret key used in production secret!
 # Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
-SECRET_KEY = 'CHANGE_ME_PLEASE'
+SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = False
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -66,14 +80,7 @@ WSGI_APPLICATION = 'ejemploPython.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db',
-        'USER': 'user',
-        'PASSWORD': 'password',
-        'HOST': 'ip',
-        'PORT': '3306',
-    }
+    'default': env.db()
 }
 
 

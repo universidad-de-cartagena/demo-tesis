@@ -16,6 +16,8 @@ pip install -r requirements.txt
 ## Despliegue
 
 ```shell
+cp ejemploPython/.env.sample ejemploPython/.env
+nano ejemploPython/.env
 python manage.py migrate --no-input
 python manage.py runserver 0.0.0.0:8080
 ```
