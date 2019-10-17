@@ -4,22 +4,24 @@ WORKDIR /app
 
 # Dependencies
 COPY requirements.txt .
-RUN pip3 install -r requirements.txt \
+RUN pip3 install --no-cache-dir -r requirements.txt \
     && apt-get update -y \
-    && apt-get install -y \
+    && apt-get install -y --no-install-recommends \
         python3-dev \
-        default-libmysqlclient-dev
+        default-libmysqlclient-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Code
 COPY notes/ notes/
 COPY ejemploPython/ ejemploPython/
 COPY manage.py .
 
-ENV DEBUG=False
+ENV DEBUG=False WAIT_HOSTS=database:3306
 
 # Convenient entrypoint and wait program
 COPY scripts/docker-entrypoint.sh /bin
-RUN chmod a+x /bin/docker-entrypoint.sh
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.6.0/wait /bin/wait
+RUN chmod a+x /bin/docker-entrypoint.sh /bin/wait
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 # Expose service
