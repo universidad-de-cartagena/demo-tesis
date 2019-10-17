@@ -2,24 +2,21 @@
 
 ## Dependencias
 
-- Debian 10.1
-- Python 3
-- pip y librerías
+- Docker
+  - Debian 10.1
+  - Python 3
+  - pip y librerías
+- docker-compose
 
 ```shell
-apt-get update -y
-apt-get install python3.7 python3-pip -y
-apt-get install python3.7-dev default-libmysqlclient-dev -y # [2]
-pip install -r requirements.txt
+docker-compose build
 ```
 
 ## Despliegue
 
 ```shell
-cp ejemploPython/.env.sample ejemploPython/.env
-nano ejemploPython/.env
-python manage.py migrate --no-input
-python manage.py runserver 0.0.0.0:8080
+nano docker-compose.yml
+docker-compose up -d
 ```
 
 ## Referencias
