@@ -16,12 +16,7 @@ docker-compose build
 
 ```shell
 nano docker-compose.yml
-docker-compose up --build -d
-docker-compose exec backend coverage run --source '.' --omit 'env/*' manage.py test #[5]
-docker-compose exec backend coverage report --show-missing
-docker-compose exec backend coverage html -d reports/htmlcov/
-docker-compose exec backend coverage xml -o reports/coverage.xml
-docker-compose exec backend rm .coverage
+docker-compose -f docker-compose.test.yml run --rm backend
 ```
 
 ## Despliegue
