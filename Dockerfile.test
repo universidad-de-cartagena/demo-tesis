@@ -16,7 +16,7 @@ COPY notes/ notes/
 COPY ejemploPython/ ejemploPython/
 COPY manage.py .
 
-ENV DEBUG=True
+ENV DEBUG=True TEST_UID=1000 TEST_GID=1000
 
 # Convenient entrypoint
 COPY scripts/docker-entrypoint.test.sh /bin

@@ -29,3 +29,7 @@ coverage report --show-missing -m
 coverage html -d reports/htmlcov/
 coverage xml -o reports/coverage.xml
 rm .coverage
+
+echo
+echo $PREFIX "Restoring user permissions"
+chown -R $TEST_UID:$TEST_GID .
