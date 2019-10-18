@@ -9,7 +9,7 @@ from .services import createNote, deleteNote, getNote, listNotes
 from .models import Note
 
 json_dumps_params = {'sort_keys': True, 'indent': 2}
-accepted_http_methods = ['GET', 'POST', 'DELETE']
+accepted_http_methods = ['GET', 'POST']
 
 
 def index(request: HttpRequest, note_uuid: UUID = None):
