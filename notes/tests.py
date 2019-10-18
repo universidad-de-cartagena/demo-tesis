@@ -29,9 +29,6 @@ class NotesBusinessLogicTest(TestCase):
                 'body': 'Unit testing x2'}
         ]
         for note in expected_result:
-            inserted_note = business_logic.createNote(
-                title=note['title'], author=note['author'], body=note['body']
-            )
             self.assertEqual(note['title'], inserted_note['title'])
             self.assertEqual(note['author'], inserted_note['author'])
             self.assertEqual(note['body'], inserted_note['body'])
