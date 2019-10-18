@@ -117,6 +117,10 @@ USE_TZ = True
 
 # STATIC_URL = '/static/'
 
+# XML test generator https://github.com/xmlrunner/unittest-xml-reporting#django-support
+TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
+TEST_OUTPUT_DIR = join(BASE_DIR, "reports/test_results")
+
 # CORS
 # By default, CORS_ORIGIN_ALLOW_ALL is set to False, this tells Django to
 # use the whitelist. If set to True, the whitelist is ignored.

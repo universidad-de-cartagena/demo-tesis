@@ -9,3 +9,5 @@ __pycache__/
 .vscode/
 # Database
 *.sqlite3
+# Test reports
+reports/
