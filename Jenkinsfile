@@ -13,6 +13,12 @@ pipeline {
     stage('Imagen Docker') {
       environment {
         DOCKERHUB = credentials('jenkinsudc-dockerhub-account')
+        // Solucion sencilla para obtener el SHA1 del commit en pipelines
+        // https://issues.jenkins-ci.org/browse/JENKINS-44449
+        GIT_COMMIT_SHORT = sh(
+          script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
+          returnStdout: true
+        )
       }
       steps {
         sh 'docker-compose build --force-rm'
@@ -26,7 +32,11 @@ pipeline {
           sh 'docker login --username $DOCKERHUB_USR --password $DOCKERHUB_PSW'
           sh 'sudo apt-get install docker-compose -y -q'
           sh 'docker tag equipo01-backend-python:latest $DOCKERHUB_USR/equipo01-backend-python:latest'
+          sh 'docker tag equipo01-backend-python:latest $DOCKERHUB_USR/equipo01-backend-python:$GIT_COMMIT_SHORT'
+          sh 'docker tag equipo01-backend-python:latest $DOCKERHUB_USR/equipo01-backend-python:$BUILD_NUMBER-$GIT_COMMIT_SHORT'
           sh 'docker push $DOCKERHUB_USR/equipo01-backend-python:latest'
+          sh 'docker push $DOCKERHUB_USR/equipo01-backend-python:$GIT_COMMIT_SHORT'
+          sh 'docker push $DOCKERHUB_USR/equipo01-backend-python:$BUILD_NUMBER-$GIT_COMMIT_SHORT'
         }
       }
     }
