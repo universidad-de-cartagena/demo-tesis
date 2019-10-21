@@ -7,7 +7,7 @@ pipeline {
       steps {
         sh 'docker container rm --force $(docker ps -a --quiet) || true'
         sh 'docker volume prune --force || true'
-        sh 'docker image prune -f || true'
+        sh 'docker image prune -f'
       }
     }
     stage('Imagen Docker') {
@@ -38,11 +38,15 @@ pipeline {
           sh 'docker push $DOCKERHUB_USR/equipo01-backend-python:$GIT_COMMIT_SHORT'
           sh 'docker push $DOCKERHUB_USR/equipo01-backend-python:$BUILD_NUMBER-$GIT_COMMIT_SHORT'
         }
+        failure {
+          sh 'docker image prune -f'
+        }
       }
     }
     stage('Tests') {
       steps {
         sh 'docker-compose -f docker-compose.test.yml run -T --rm -e TEST_UID=$(id -u) -e TEST_GID=$(id -g) backend'
+        junit(testResults: 'reports/test_results/*.xml', allowEmptyResults: true)
         script {
           publishHTML([
             allowMissing: false,
@@ -55,8 +59,11 @@ pipeline {
           ])
         }
         cobertura(coberturaReportFile: 'reports/coverage.xml', conditionalCoverageTargets: '70, 0, 0', lineCoverageTargets: '80, 0, 0', methodCoverageTargets: '80, 0, 0', sourceEncoding: 'ASCII')
-        junit(testResults: 'reports/test_results/*.xml', allowEmptyResults: true)
-        sh 'rm -rdf reports/'
+      }
+      post {
+        always {
+          sh 'rm -rdf reports/'
+        }
       }
     }
     stage('Deploy') {
@@ -65,9 +72,9 @@ pipeline {
       }
       post {
         failure {
-          sh 'docker volume prune --force || true'
           sh 'docker container rm --force $(docker ps -a --quiet) || true'
-          sh 'docker image prune -f || true'
+          sh 'docker volume prune --force || true'
+          sh 'docker image prune -f'
         }
       }
     }
